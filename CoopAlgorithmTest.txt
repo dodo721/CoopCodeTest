@@ -1,0 +1,41 @@
+Cooperative Innovations Algorithm Test
+======================================
+
+This code test is intended to give us an idea how you can research, solve and code a real problem.
+It is not intended that you necessarily complete all parts of the test. Spend up to one normal working day.
+
+Please record a timelapse video of your work for the test. We recommend Chronolapse:
+https://code.google.com/archive/p/chronolapse/downloads
+
+Use any reference resources you like, provided you write the code. Feel free to use the internet, books or any other resources. Please comment your code to explain your choice of algorithm and anything another programmer should be aware of.
+
+You have been provided EyeMeshData.cpp
+
+This contains real vertex data for the hidden area mesh for a single eye of a current VR Headset. There are 3 tests, that gradually do more with the data.
+
+Do *not* feel you have to complete all 3 algrithm tests. Remember, the idea here is to see the your process of working, not the final result.
+You can chose to do any of the tests and you do not have to do them in order.
+
+There are 3 hand draw figures included. They do not fully reflect the data supplied, but are the representative of explanatory diagrams you would receive when working.
+
+Test 1
+======
+
+Figure_1.jpg shows a simpler version of what the supplied mesh looks like. The mesh data is series of triangles that blank off the outside of a frame that will be submitted to a VR headset for viewing. The lenses used in the headsets mean that the area being blanked off by the mesh cannot be seen inside the headset, so that area is blanked off to avoid wasting rendering effort on things you won't see inside the headset. The mesh data included describes each triangle as 3 vertices. This is not typically how mesh data is supplied to a GPU for efficient rendering. For the first test, generate a more efficient version for rendering the mesh data on a modern PC. By more efficient here, I mean either less data requires to be sent to the GPU, or the GUP can render the given data faster, or both.
+
+Test 2
+======
+
+The mesh provided blanks out hidden areas on the outside of the render target. From this data, create the opposite - a triangle mesh that matches exactly to the provided hidden area mesh, but covers the visible area.
+Figure_2.jpg shows the desired result, again for a simplified version. Each triangle desired has an X inside it. This is the "inside", rather than the "outside" of the original data. 
+
+Test 3
+======
+
+The supplied hidden area blanks off the area not seen due to lens distortion. It is desirable to be able to blank off some of the FOV past the hidden area mesh. Create a function that given a fraction to blank off in X and Y, returns a mesh that exactly matches the existing hidden area mesh on the outside, while blanking off the requested additional fraction.
+Figure_3.jpg shows the desired result. You can see how the area in the middle is similar to Figure_1, but smaller by some fraction.
+
+
+For all of these tests, the result is mesh data. You are not required to provide visualisation of the mesh data.
+
+Please supply your results, plus timelapse video.
