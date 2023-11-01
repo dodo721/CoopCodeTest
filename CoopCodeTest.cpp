@@ -86,9 +86,35 @@ intptr_t AlignAddressForward(intptr_t Address, int Alignment)
 int RemoveIfOrderPreserving(int* Array, int ArrayLength, PredicateFunctionPointer Pred)
 {
 
+	// Tried to do a more space efficient algorithm to swap everything in place -
+	// however could not think of a way to shift all elements down with each true Pred,
+	// without boosting time complexity to almost O(n^2).
+	// Given lack of time to think of anything else, the additional space seems a reasonable compromise
+	/*
+	int interval = 0;
+	int length = ArrayLength;
+	for (int i = 0; i < ArrayLength; i ++) {
+		int val = *(Array + i);
+		if (Pred(val)) {
+			// record how many in a row we hit
+			interval ++;
+		} else {
+			// flush the interval
+			for (int j = 0; j < interval; j++) {
+				*(Array + i - interval + j) = *(Array + i + j);
+			}
+			length -= interval;
+			interval = 0;
+			i -= interval;
+		}
+	}
+	return length;*/
+
+	// temporary array to store elements in
 	int *new_array = (int*)malloc(ArrayLength * sizeof(int));
 	int new_arr_idx = 0;
-	//	Fill in this function so that follows the description above and TEST_RemoveIfOrderPreserving passes.
+
+	// loop and test each element
 	for (int i = 0; i < ArrayLength; i++) {
 		int val = *(Array + i);
 		if (!Pred(val)) {
@@ -96,6 +122,8 @@ int RemoveIfOrderPreserving(int* Array, int ArrayLength, PredicateFunctionPointe
 			new_arr_idx++;
 		}
 	}
+
+	// copy temp array to original and clenaup
 	for (int i = 0; i < new_arr_idx; i++) {
 		*(Array + i) = *(new_array + i);
 	}
@@ -122,8 +150,11 @@ int RemoveIfOrderPreserving(int* Array, int ArrayLength, PredicateFunctionPointe
 int RemoveIf(int* Array, int ArrayLength, PredicateFunctionPointer Pred)
 {
 
-	//	Fill in this function so that follows the description above and TEST_RemoveIf passes AND it uses less Array operations than RemoveIfOrderPreserving, if possible.
-	//	(It is possible your RemoveIfOrderPreserving is already optimal)
+	// Cannot reduce time complexity from O(n) as must iterate over every element -
+	// Only way to reduce space is to swap elements in place,
+	// but cannot think of how to do so without increasing time.
+	// Using same algorithm for time
+	return RemoveIfOrderPreserving(Array, ArrayLength, Pred);
 
 }
 
@@ -138,7 +169,7 @@ int RemoveIf(int* Array, int ArrayLength, PredicateFunctionPointer Pred)
 bool AreIntervalsIntersecting(float i1Start, float i1End, float i2Start, float i2End)
 {
 	
-	//	Fill in this function so that follows the description above and TEST_AreIntervalsIntersecting passes.
+	return (i1End > i2Start && i1Start < i2End);
 
 }
 
@@ -151,10 +182,27 @@ bool AreIntervalsIntersecting(float i1Start, float i1End, float i2Start, float i
 //	
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+struct Vector3 {
+	float x;
+	float y;
+	float z;
+};
+
 bool AreBoxesIntersecting(const Box3D Box1, const Box3D Box2)
 {
 
-	//	Fill in this function so that follows the description above and TEST_AreBoxesIntersecting passes.
+	Vector3 Min1 = {Box1.MinX, Box1.MinY, Box1.MinZ};
+	Vector3 Max1 = {Box1.MaxX, Box1.MaxY, Box1.MaxZ};
+
+	Vector3 Min2 = {Box2.MinX, Box2.MinY, Box2.MinZ};
+	Vector3 Max2 = {Box2.MaxX, Box2.MaxY, Box2.MaxZ};
+	
+	// do axes intersect
+	bool xIntersect = AreIntervalsIntersecting(Min1.x, Max1.x, Min2.x, Max2.x);
+	bool yIntersect = AreIntervalsIntersecting(Min1.y, Max1.y, Min2.y, Max2.y);
+	bool zIntersect = AreIntervalsIntersecting(Min1.z, Max1.z, Min2.z, Max2.z);
+
+	return xIntersect && yIntersect && zIntersect;
 
 }
 
@@ -343,11 +391,11 @@ int main()
 
 	TEST_RemoveIfOrderPreserving();
 
-	/*TEST_RemoveIf();
+	TEST_RemoveIf();
 
 	TEST_AreIntervalsIntersecting();
 
-	TEST_AreBoxesIntersecting();*/
+	TEST_AreBoxesIntersecting();
 
 	printf("All tests passed. :)\n");
     
