@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.18.4)
 
 project(CoopCodeTest)
 
-add_executable ( CoopCodeTest CoopCodeTest.cpp )
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-#target_link_libraries ( CoopCodeTest ${SimpleITK_LIBRARIES} )
+include_directories(${CMAKE_SOURCE_DIR}/include)
+
+file(GLOB_RECURSE SOURCES "src/*.cpp")
+
+add_executable ( CoopCodeTest ${SOURCES} ${SHADERS} )

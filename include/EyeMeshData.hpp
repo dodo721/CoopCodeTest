@@ -11,13 +11,31 @@
 
 #pragma once
 
+#include <math.h>
+
 struct Vertex2D
 {
-				Vertex2D(float InX, float InY)
-				{
-					X = InX;
-					Y = InY;
-				}
+	Vertex2D(float InX, float InY)
+	{
+		X = InX;
+		Y = InY;
+	}
+	Vertex2D() {
+		X = 0;
+		Y = 0;
+	}
+
+	bool operator==(const Vertex2D& rhs) const {
+		return X == rhs.X && Y == rhs.Y;
+	};
+
+	/*float length () {
+		return sqrt((X * X) + (Y * Y));
+	}
+
+	bool operator< (Vertex2D &rhs) {
+		return length() < rhs.length();
+	}*/
 
 	float		X;
 	float		Y;
@@ -122,3 +140,5 @@ const Vertex2D		LeftEyeHiddenAreaPositions[] =
 	Vertex2D(0.07756151259f, 0.9210018516f),
 	Vertex2D(0.0f, 1.0f),
 };
+
+const int LeftEyeHiddenAreaPositionsLength = 96;
