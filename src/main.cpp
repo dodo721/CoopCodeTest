@@ -6,38 +6,31 @@
 #include "optimize_mesh.h"
 #include "export_mesh.h"
 #include "file.h"
-//#include "render.h"
+#include "invert_mesh.h"
 
 using namespace std;
 
 int main () {
 
-    cout << "Started!" << endl;
+    cout << "Started!\n" << endl;
 
+    // QUESTION 1
     Mesh *optimized_mesh = optimize_data(LeftEyeHiddenAreaPositions, LeftEyeHiddenAreaPositionsLength);
-
-    cout << "Optimized mesh info:\nVert length: " << optimized_mesh->vert_length << "\nIndice length: " << optimized_mesh->indice_length << endl;
-    
-
-    // render result to test
-    //GLFWwindow *window = render_init(1024, 1024);
-
+    cout << "Optimized mesh info:\nVert length: " << optimized_mesh->vert_length << "\nIndice length: " << optimized_mesh->indice_length << "\n" << endl;
     string obj_file = mesh_to_obj(optimized_mesh);
-
-    cout << "OBJ FILE\n" << obj_file << endl;
-
     write_to_file("eye_mesh.obj", obj_file);
 
-    /*do {
-		
-		//render_update();
+    // QUESTION 2
+    Mesh *inverted_mesh = invert_mesh(optimized_mesh);
+    cout << "Inverted mesh info:\nVert length: " << inverted_mesh->vert_length << "\nIndice length: " << inverted_mesh->indice_length << "\n" << endl;
+    string inverted_obj_file = mesh_to_obj(inverted_mesh);
+    write_to_file("inverted_mesh.obj", inverted_obj_file);
 
-	} while( glfwGetKey(window, GLFW_KEY_ESCAPE ) != GLFW_PRESS &&
-		   glfwWindowShouldClose(window) == 0 ); // Check if the ESC key was pressed or the window was closed
-
-	render_cleanup();*/
+    // QUESTION 3
+    
 
     delete optimized_mesh;
+    delete inverted_mesh;
 
     cout << "Finished" << endl;
 

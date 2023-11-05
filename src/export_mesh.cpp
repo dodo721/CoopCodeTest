@@ -17,6 +17,14 @@ string mesh_to_obj (Mesh *mesh) {
 
     obj += "\n";
 
+    // normals - all just face one way
+    // done this way instead of via face so blender shades smooth
+    for (int i = 0; i < mesh->vert_length; i++) {
+        obj += "vn 0.0 0.0 1.0\n";
+    }
+
+    obj += "\n";
+
     // indices (faces)
     for (int i = 0; i < mesh->indice_length; i += 3) {
         // OBJ format is 1-based indexing >:(

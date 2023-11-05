@@ -1,3 +1,9 @@
+/**
+ * TEST QUESTION 1
+ * Optimizes mesh data format to standard vert, indice
+ * 
+*/
+
 
 #include "optimize_mesh.h"
 #include <unordered_map>
@@ -33,6 +39,7 @@ Mesh *optimize_data (const Vertex2D *mesh_data, int mesh_data_length) {
         indices[i] = indice;
     }
 
+    // TODO could calculate this size in advance, not need to make 2 arrays for it
     // Shorten vertex array to unique length
     Vertex2D *new_vertices_shortened = (Vertex2D*)malloc(new_vert_idx * sizeof(Vertex2D));
     for (int i = 0; i < new_vert_idx; i++) {
