@@ -10,31 +10,9 @@
 #include "EyeMeshData.hpp"
 #include <unordered_map>
 #include <iostream>
+#include "vert_utils.h"
 
 using namespace std;
-
-// if a vertex has both (1 || 0) in X and Y, its in a corner
-bool is_vertex_corner (Vertex2D &v) {
-    return (v.X == 1 || v.X == 0) && (v.Y == 1 || v.Y == 0);
-}
-
-// compare indice to previously stored list of corner indices
-bool is_indice_corner (int indice, int *corners) {
-    for (int i = 0; i < 4; i++) {
-        if (indice == corners[i]) {
-            return true;
-        }
-    }
-    return false;
-}
-
-// for adding the top, bottom and side triangles after doing the rest of the tris
-void add_side_triangle (int *side_indices, int center, int *new_indices, int &startIdx) {
-    new_indices[startIdx] = side_indices[0];
-    new_indices[startIdx + 1] = center;
-    new_indices[startIdx + 2] = side_indices[1];
-    startIdx += 3;
-}
 
 Mesh *invert_mesh (Mesh *eye_mesh) {
 
@@ -57,14 +35,7 @@ Mesh *invert_mesh (Mesh *eye_mesh) {
     // for preserving order later
     unordered_map<int, int> index_map;
     // record top, bottom and side indices too for side triangles
-    int tops[2];
-    int topIdx = 0;
-    int bottoms[2];
-    int bottomIdx = 0;
-    int lefts[2];
-    int leftIdx = 0;
-    int rights[2];
-    int rightIdx = 0;
+    SideIndices side_indices = {};
 
     for (int i = 0; i < eye_mesh->vert_length; i++) {
         Vertex2D v = old_verts[i];
@@ -74,22 +45,7 @@ Mesh *invert_mesh (Mesh *eye_mesh) {
             index_map[i] = new_vert_idx; // map old index to new
             
             // check if its a side vertex
-            if (v.X == 0) {
-                lefts[leftIdx] = new_vert_idx;
-                leftIdx++;
-            }
-            if (v.X == 1) {
-                rights[rightIdx] = new_vert_idx;
-                rightIdx++;
-            }
-            if (v.Y == 0) {
-                bottoms[bottomIdx] = new_vert_idx;
-                bottomIdx++;
-            }
-            if (v.Y == 1) {
-                tops[topIdx] = new_vert_idx;
-                topIdx++;
-            }
+            side_indices.add_side_vert(v, new_vert_idx);
             new_vert_idx++;
         } else {
             corner_idxs[corners_found] = i;
@@ -126,10 +82,10 @@ Mesh *invert_mesh (Mesh *eye_mesh) {
 
     // add top and bottom and side triangles using side verts
     int startIdx = new_indice_length - 12;
-    add_side_triangle(tops, new_vert_idx, new_indices, startIdx);
-    add_side_triangle(bottoms, new_vert_idx, new_indices, startIdx);
-    add_side_triangle(lefts, new_vert_idx, new_indices, startIdx);
-    add_side_triangle(rights, new_vert_idx, new_indices, startIdx);    
+    add_side_triangle(side_indices.tops, new_vert_idx, new_indices, startIdx);
+    add_side_triangle(side_indices.bottoms, new_vert_idx, new_indices, startIdx);
+    add_side_triangle(side_indices.lefts, new_vert_idx, new_indices, startIdx);
+    add_side_triangle(side_indices.rights, new_vert_idx, new_indices, startIdx);    
 
     Mesh *mesh = new Mesh();
 

@@ -29,6 +29,18 @@ struct Vertex2D
 		return X == rhs.X && Y == rhs.Y;
 	};
 
+	Vertex2D operator+(const Vertex2D& rhs) {
+		return {X + rhs.X, Y + rhs.Y};
+	}
+
+	Vertex2D operator-(const Vertex2D& rhs) {
+		return {X - rhs.X, Y - rhs.Y};
+	}
+
+	Vertex2D operator*(const float& rhs) {
+		return {X * rhs, Y * rhs};
+	}
+
 	/*float length () {
 		return sqrt((X * X) + (Y * Y));
 	}
