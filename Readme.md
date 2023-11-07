@@ -6,3 +6,4 @@ Vera Durkin's submission for the interview test
 
 * Question 1 in optimize_mesh.cpp
 * Question 2 in invert_mesh.cpp
+* Question 3 in shrink_hole.cpp

@@ -16,7 +16,7 @@ Mesh *optimize_data (const Vertex2D *mesh_data, int mesh_data_length) {
     // map to index new vertex list with
     // doubles as being able to check for uniqueness, and cacheing new index positions for quick lookup
     unordered_map<Vertex2D, int> vertex_index;
-    Vertex2D new_vertices[mesh_data_length];
+    Vertex2D new_vertices[96];
 
     // generate unique list of vertices
     int new_vert_idx = 0;
